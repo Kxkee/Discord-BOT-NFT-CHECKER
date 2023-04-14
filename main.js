@@ -4,9 +4,10 @@ const { ethers } = require("ethers");
 const odysseyAbi = require("./abi/odissey.json");
 const { createClient } = require('@supabase/supabase-js');
 const {checkVip, supabase} = require('./utils/checkVip');
+require('dotenv').config();
 
 const odysseyContractAddress = "0xfAe39eC09730CA0F14262A636D2d7C5539353752";
-const provider = new ethers.AlchemyProvider("arbitrum", "Nzh8TUnFXk60XRVydoI54LjgvDz6h39d");
+const provider = new ethers.AlchemyProvider("arbitrum", `${process.env.ALCHEMY_KEY}`);
 
 const client = new Client({
     intents: [
@@ -134,7 +135,7 @@ client.on(Events.ClientReady, async () => {
                 vipMembers.splice(index, 1);
             }
         }
-        //console.log(vipMembers);
+        // Affichez les membres vip dans un array avec refresh tout les 30sec : console.log(vipMembers);
         // Itérer sur chaque utilisateur et vérifier s'ils possèdent toujours le NFT
         for (const user of users) {
             const walletAddress = user.wallet_address;
@@ -164,4 +165,4 @@ client.on(Events.ClientReady, async () => {
     }, 30000);
 });
 
-client.login(token);
+client.login(process.env.DISCORD_TOKEN);
